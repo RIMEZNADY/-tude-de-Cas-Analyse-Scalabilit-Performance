@@ -1,0 +1,35 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'rest-api'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['rest-api:8080']
+        labels:
+          api_type: 'rest'
+
+  - job_name: 'soap-api'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['soap-api:8080']
+        labels:
+          api_type: 'soap'
+
+  - job_name: 'graphql-api'
+    static_configs:
+      - targets: ['graphql-api:4000']
+        labels:
+          api_type: 'graphql'
+
+  - job_name: 'grpc-api'
+    static_configs:
+      - targets: ['grpc-api:9090']
+        labels:
+          api_type: 'grpc'
+
