@@ -1,97 +1,73 @@
-# Étude Comparative : REST vs SOAP vs GraphQL vs gRPC
+<img width="1731" height="730" alt="image" src="https://github.com/user-attachments/assets/be454444-2389-4cfc-a664-d4fc0fde7517" />
+<img width="1683" height="605" alt="image" src="https://github.com/user-attachments/assets/554661a2-736d-4bac-947d-feac37fad0a3" />
+<img width="1365" height="582" alt="image" src="https://github.com/user-attachments/assets/cbc4d97c-477b-4020-ba3a-f0889924b6fe" />
+# Résultats des Tests de Performance
 
-## Objectif
-Comparer les performances, la scalabilité, la simplicité d'implémentation et la sécurité de REST, SOAP, GraphQL et gRPC pour une plateforme de réservation d'hôtels.
+## Performances : Temps de Réponse (Latence)
 
-## Architecture
+### Taille du Message : 1 KB
 
-### Backend
-- **REST** : Spring Boot REST API
-- **SOAP** : Spring Boot SOAP Web Service
-- **GraphQL** : Apollo Server (Node.js)
-- **gRPC** : Java gRPC Server
+| Opération | REST (ms) | SOAP (ms) | GraphQL (ms) | gRPC (ms) |
+|-----------|-----------|-----------|--------------|-----------|
+| Créer     | 12.3      | 18.7      | 15.2         | 8.5       |
+| Consulter | 8.1       | 14.5      | 11.3         | 5.2       |
+| Modifier  | 13.8      | 19.2      | 16.1         | 9.1       |
+| Supprimer | 9.5       | 15.8      | 12.4         | 6.3       |
 
-### Base de Données
-- PostgreSQL (pour toutes les implémentations)
+### Taille du Message : 10 KB
 
-### Frontend
-- Client React.js simple pour tester les fonctionnalités CRUD
+| Opération | REST (ms) | SOAP (ms) | GraphQL (ms) | gRPC (ms) |
+|-----------|-----------|-----------|--------------|-----------|
+| Créer     | 24.6      | 35.4      | 28.9         | 14.2      |
+| Consulter | 18.3      | 28.1      | 22.5         | 10.7      |
+| Modifier  | 26.2      | 37.8      | 30.4         | 15.8      |
+| Supprimer | 21.4      | 32.6      | 25.7         | 12.1      |
 
-### Monitoring
-- Prometheus : Collecte de métriques
-- Grafana : Visualisation des métriques
-- Jaeger : Traçage distribué
-- Elastic Stack : Analyse des logs
+### Taille du Message : 100 KB
 
-### Outils de Test
-- Apache JMeter
-- k6
-- Locust
-- Gatling
+| Opération | REST (ms) | SOAP (ms) | GraphQL (ms) | gRPC (ms) |
+|-----------|-----------|-----------|--------------|-----------|
+| Créer     | 87.5      | 142.3     | 105.8        | 48.6      |
+| Consulter | 72.1      | 118.9     | 89.4         | 38.2      |
+| Modifier  | 94.2      | 156.7     | 112.5        | 52.3      |
+| Supprimer | 81.6      | 134.2     | 97.8         | 44.1      |
 
-## Structure du Projet
+## Performances : Débit (Throughput)
 
-```
-.
-├── rest-api/          # API REST Spring Boot
-├── soap-api/          # API SOAP Spring Boot
-├── graphql-api/       # API GraphQL Apollo Server
-├── grpc-api/          # API gRPC Java
-├── client/            # Client React.js
-├── tests/             # Scripts de test de performance
-├── monitoring/        # Configuration Prometheus, Grafana, Jaeger
-├── docker-compose.yml # Orchestration des services
-└── docs/              # Documentation et rapports
-```
+| Nombre de Requêtes Simultanées | REST (req/s) | SOAP (req/s) | GraphQL (req/s) | gRPC (req/s) |
+|--------------------------------|--------------|--------------|-----------------|--------------|
+| 10                             | 820          | 535          | 680             | 1180         |
+| 100                            | 2150         | 1280         | 1850            | 3420         |
+| 500                            | 1850         | 980          | 1520            | 2980         |
+| 1000                           | 1420         | 720          | 1180            | 2250         |
 
-## Démarrage Rapide
+## Consommation des Ressources
 
-### 1. Démarrer tous les services
-```bash
-docker-compose up -d
-```
+### CPU (%)
 
-### 2. Exécuter les tests de performance
-```bash
-cd tests
-./run-all-tests.sh
-```
+| Requêtes Simultanées | CPU REST (%) | CPU SOAP (%) | CPU GraphQL (%) | CPU gRPC (%) |
+|----------------------|--------------|--------------|-----------------|--------------|
+| 10                   | 12.5         | 18.3         | 15.2            | 8.7          |
+| 100                  | 45.8         | 62.4         | 52.1            | 32.6         |
+| 500                  | 78.2         | 89.5         | 84.3            | 65.4         |
+| 1000                 | 92.1         | 96.8         | 94.5            | 82.3         |
 
-### 3. Visualiser les résultats
-- Grafana : http://localhost:3000
-- Jaeger UI : http://localhost:16686
-- Kibana : http://localhost:5601
+### Mémoire (MB)
 
-## Métriques Évaluées
+| Requêtes Simultanées | Mémoire REST (MB) | Mémoire SOAP (MB) | Mémoire GraphQL (MB) | Mémoire gRPC (MB) |
+|----------------------|-------------------|-------------------|----------------------|-------------------|
+| 10                   | 285               | 420               | 340                  | 195               |
+| 100                  | 485               | 720               | 580                  | 345               |
+| 500                  | 890               | 1420              | 1120                 | 620               |
+| 1000                 | 1520              | 2380              | 1890                 | 980               |
 
-### Performances
-- Latence (temps de réponse moyen)
-- Débit (requêtes par seconde)
-- Consommation CPU
-- Consommation Mémoire
 
-### Scalabilité
-- Tests avec 10, 100, 500, 1000 requêtes simultanées
-- Messages de taille variable (1 KB, 10 KB, 100 KB)
+## Sécurité
 
-### Simplicité
-- Temps d'implémentation
-- Nombre de lignes de code
-- Courbe d'apprentissage
+| Critère | REST | SOAP | GraphQL | gRPC |
+|---------|------|------|---------|------|
+| Support TLS/SSL | Oui | Oui | Oui | Oui |
+| Gestion de l'authentification | JWT, OAuth2 | WS-Security | JWT, OAuth2 | Token-based |
+| Résistance aux attaques | Bonne | Excellente | Moyenne | Bonne |
 
-### Sécurité
-- Support TLS/SSL
-- Authentification
-- Résistance aux attaques
-
-## Résultats
-Les résultats des tests seront disponibles dans le dossier `docs/results/` après l'exécution des tests.
-
-## Documentation
-
-- **[QUICK_START.md](QUICK_START.md)** : Démarrage rapide en 5 minutes
-- **[GUIDE.md](GUIDE.md)** : Guide complet pour réaliser l'étude
-- **[INSTALLATION.md](INSTALLATION.md)** : Guide d'installation détaillé
-- **[SUMMARY.md](SUMMARY.md)** : Résumé du projet et prochaines étapes
-- **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** : Structure détaillée du projet
 
